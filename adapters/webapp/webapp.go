@@ -1,8 +1,10 @@
 package webapp
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"path"
@@ -13,6 +15,10 @@ import (
 type WebApp struct {
 	server *http.Server
 	Mux    *http.ServeMux
+}
+
+type answerForm struct {
+	AnswerID int `json:"answerid"`
 }
 
 type questionsListPage struct {
@@ -34,11 +40,29 @@ func NewWebApp(templatesDir string, questions []core.Question) *WebApp {
 	})
 
 	tmplQuestion := template.Must(template.ParseFiles(path.Join(templatesDir, "question.html")))
+	tmplCongrats := template.Must(template.ParseFiles(path.Join(templatesDir, "congrats.html")))
+	tmplCondolences := template.Must(template.ParseFiles(path.Join(templatesDir, "condolences.html")))
 	for index, q := range questions {
-		path := fmt.Sprintf("/questions/%v", index)
 		questionToServe := q
-		w.Mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+
+		questionPath := fmt.Sprintf("/questions/%v", index)
+		w.Mux.HandleFunc(questionPath, func(w http.ResponseWriter, r *http.Request) {
 			tmplQuestion.Execute(w, questionToServe)
+		})
+
+		answerPath := fmt.Sprintf("/answer/%v", index)
+		w.Mux.HandleFunc(answerPath, func(w http.ResponseWriter, r *http.Request) {
+			body, _ := ioutil.ReadAll(r.Body)
+
+			_ = r.Body.Close()
+
+			var answer answerForm
+			_ = json.Unmarshal(body, &answer)
+			if questionToServe.IsCorrect(answer.AnswerID) {
+				tmplCongrats.Execute(w, nil)
+			} else {
+				tmplCondolences.Execute(w, nil)
+			}
 		})
 	}
 

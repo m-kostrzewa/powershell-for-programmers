@@ -1,6 +1,8 @@
 package e2e_test
 
 import (
+	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -27,9 +29,9 @@ var _ = Describe("Quiz", func() {
 			Text:  "Does Powershell do X?",
 			Body:  "Some pseudocode here....",
 			Answers: []core.Answer{
-				{Text: "Answer 1", IsCorrect: false},
-				{Text: "Answer 2", IsCorrect: true},
-				{Text: "Answer 3", IsCorrect: true},
+				{Text: "Answer 1", IsCorrect: true},
+				{Text: "Answer 2", IsCorrect: false},
+				{Text: "Answer 3", IsCorrect: false},
 			},
 		},
 		{
@@ -37,9 +39,9 @@ var _ = Describe("Quiz", func() {
 			Text:  "What is the expected output?",
 			Body:  "Some other pseudocode here....",
 			Answers: []core.Answer{
-				{Text: "aab", IsCorrect: false},
-				{Text: "abb", IsCorrect: true},
-				{Text: "aba", IsCorrect: true},
+				{Text: "aab", IsCorrect: true},
+				{Text: "abb", IsCorrect: false},
+				{Text: "aba", IsCorrect: false},
 			},
 		},
 	}
@@ -87,13 +89,35 @@ var _ = Describe("Quiz", func() {
 		})
 	})
 
-	Context("/questions/answer", func() {
+	Context("/answer/0", func() {
 		It("shows congrats if the selected answer is correct", func() {
+			values := map[string]int{"answerID": 0}
+			formContent, _ := json.Marshal(values)
+			resp, err := http.Post(ts.URL+"/answer/0", "application/json", bytes.NewBuffer(formContent))
 
+			Expect(err).ToNot(HaveOccurred())
+			Expect(resp.StatusCode).To(Equal(200))
+
+			body, err := ioutil.ReadAll(resp.Body)
+			Expect(err).ToNot(HaveOccurred())
+			bodyStr := string(body)
+
+			Expect(bodyStr).To(ContainSubstring("Congrats"))
 		})
 
 		It("shows condolences if the selected answer is incorrect", func() {
+			values := map[string]int{"answerID": 1}
+			formContent, _ := json.Marshal(values)
+			resp, err := http.Post(ts.URL+"/answer/0", "application/json", bytes.NewBuffer(formContent))
 
+			Expect(err).ToNot(HaveOccurred())
+			Expect(resp.StatusCode).To(Equal(200))
+
+			body, err := ioutil.ReadAll(resp.Body)
+			Expect(err).ToNot(HaveOccurred())
+			bodyStr := string(body)
+
+			Expect(bodyStr).To(ContainSubstring("Sorry"))
 		})
 	})
 })
