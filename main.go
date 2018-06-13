@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/m-kostrzewa/powershell-for-programmers/webapp"
+	"github.com/m-kostrzewa/powershell-for-programmers/adapters/webapp"
 )
 
 func main() {

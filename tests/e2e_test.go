@@ -6,7 +6,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/m-kostrzewa/powershell-for-programmers/webapp"
+	"github.com/m-kostrzewa/powershell-for-programmers/adapters/webapp"
 )
 
 func TestE2E(t *testing.T) {
