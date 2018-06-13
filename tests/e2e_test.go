@@ -1,6 +1,8 @@
 package e2e_test
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	. "github.com/onsi/ginkgo"
@@ -15,18 +17,21 @@ func TestE2E(t *testing.T) {
 }
 
 var _ = Describe("Quiz", func() {
-	var webapp webapp.WebApp
+	var ts *httptest.Server
 	BeforeEach(func() {
-		webapp.Serve("../templates")
+		app := webapp.NewWebApp("../templates")
+		ts = httptest.NewServer(app.Mux)
 	})
 
 	AfterEach(func() {
-		webapp.Shutdown()
+		ts.Close()
 	})
 
 	Context("/questions", func() {
 		It("lists all available questions", func() {
-
+			resp, err := http.Get(ts.URL + "/questions")
+			Expect(err).To(BeNil())
+			Expect(resp.StatusCode).To(Equal(200))
 		})
 	})
 

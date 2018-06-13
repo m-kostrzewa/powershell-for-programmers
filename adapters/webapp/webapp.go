@@ -11,16 +11,19 @@ import (
 
 type WebApp struct {
 	server *http.Server
+	Mux    *http.ServeMux
 }
 
-func (w *WebApp) Serve(layoutsDir string) {
-
+func NewWebApp(layoutsDir string) *WebApp {
 	layoutTmpl := path.Join(layoutsDir, "layout.html")
-
 	tmpl := template.Must(template.ParseFiles(layoutTmpl))
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	w := WebApp{
+		server: nil,
+		Mux:    http.NewServeMux(),
+	}
+
+	w.Mux.HandleFunc("/questions", func(w http.ResponseWriter, r *http.Request) {
 		data := core.Question{
 			Title: "Lexical scope",
 			Text:  "Does Powershell do X?",
@@ -34,9 +37,12 @@ func (w *WebApp) Serve(layoutsDir string) {
 		tmpl.Execute(w, data)
 	})
 
-	listener, _ := net.ListenTCP("tcp4", &net.TCPAddr{IP: net.IPv4(127, 0, 0, 1), Port: 8080})
+	return &w
+}
 
-	w.server = &http.Server{Handler: mux}
+func (w *WebApp) Serve(layoutsDir string) {
+	listener, _ := net.ListenTCP("tcp4", &net.TCPAddr{IP: net.IPv4(127, 0, 0, 1), Port: 8080})
+	w.server = &http.Server{Handler: w.Mux}
 
 	go func() {
 		_ = w.server.Serve(listener)
