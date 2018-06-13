@@ -6,10 +6,10 @@ type Answer struct {
 }
 
 type Question struct {
-	Title        string
-	QuestionText string
-	CodeBody     string
-	Answers      []Answer
+	Title   string
+	Text    string
+	Body    string
+	Answers []Answer
 }
 
 func (q *Question) IsCorrect(answerId int) bool {

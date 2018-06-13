@@ -1,0 +1,9 @@
+<h1>Powershell for programmers<h1>
+<ul>
+<li class="QTitle">{{.Title}}</li>
+<div class="QText">{{.Text}}</div>
+<div class="QBody">{{.Body}}</div>
+    {{range .Answers}}
+        <li class="QAnswer">{{.Text}}</li>
+    {{end}}
+</ul>
