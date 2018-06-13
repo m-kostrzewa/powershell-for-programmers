@@ -1,6 +1,7 @@
 package webapp
 
 import (
+	"fmt"
 	"html/template"
 	"net"
 	"net/http"
@@ -14,28 +15,32 @@ type WebApp struct {
 	Mux    *http.ServeMux
 }
 
-func NewWebApp(layoutsDir string) *WebApp {
-	layoutTmpl := path.Join(layoutsDir, "layout.html")
-	tmpl := template.Must(template.ParseFiles(layoutTmpl))
+type questionsListPage struct {
+	Questions []core.Question
+}
 
+func NewWebApp(templatesDir string, questions []core.Question) *WebApp {
 	w := WebApp{
 		server: nil,
 		Mux:    http.NewServeMux(),
 	}
 
+	tmplQuestionsList := template.Must(template.ParseFiles(path.Join(templatesDir, "questions_list.html")))
 	w.Mux.HandleFunc("/questions", func(w http.ResponseWriter, r *http.Request) {
-		data := core.Question{
-			Title: "Lexical scope",
-			Text:  "Does Powershell do X?",
-			Body:  "Some pseudocode here....",
-			Answers: []core.Answer{
-				{Text: "Answer 1", IsCorrect: false},
-				{Text: "Answer 2", IsCorrect: true},
-				{Text: "Answer 3", IsCorrect: true},
-			},
+		data := questionsListPage{
+			Questions: questions,
 		}
-		tmpl.Execute(w, data)
+		tmplQuestionsList.Execute(w, data)
 	})
+
+	tmplQuestion := template.Must(template.ParseFiles(path.Join(templatesDir, "question.html")))
+	for index, q := range questions {
+		path := fmt.Sprintf("/questions/%v", index)
+		questionToServe := q
+		w.Mux.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+			tmplQuestion.Execute(w, questionToServe)
+		})
+	}
 
 	return &w
 }
