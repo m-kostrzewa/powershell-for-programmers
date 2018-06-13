@@ -16,9 +16,9 @@ func main() {
 			Text:  "Does Powershell do X?",
 			Body:  "Some pseudocode here....",
 			Answers: []core.Answer{
-				{Text: "Answer 1", IsCorrect: false},
-				{Text: "Answer 2", IsCorrect: true},
-				{Text: "Answer 3", IsCorrect: true},
+				{Text: "Answer 1", IsCorrect: true},
+				{Text: "Answer 2", IsCorrect: false},
+				{Text: "Answer 3", IsCorrect: false},
 			},
 		},
 		{
@@ -26,9 +26,9 @@ func main() {
 			Text:  "What is the expected output?",
 			Body:  "Some other pseudocode here....",
 			Answers: []core.Answer{
-				{Text: "aab", IsCorrect: false},
-				{Text: "abb", IsCorrect: true},
-				{Text: "aba", IsCorrect: true},
+				{Text: "aab", IsCorrect: true},
+				{Text: "abb", IsCorrect: false},
+				{Text: "aba", IsCorrect: false},
 			},
 		},
 	}
