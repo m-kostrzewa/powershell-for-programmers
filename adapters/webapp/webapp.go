@@ -1,13 +1,12 @@
 package webapp
 
 import (
-	"encoding/json"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"path"
+	"strconv"
 
 	"github.com/m-kostrzewa/powershell-for-programmers/core"
 )
@@ -52,13 +51,9 @@ func NewWebApp(templatesDir string, questions []core.Question) *WebApp {
 
 		answerPath := fmt.Sprintf("/answer/%v", index)
 		w.Mux.HandleFunc(answerPath, func(w http.ResponseWriter, r *http.Request) {
-			body, _ := ioutil.ReadAll(r.Body)
-
-			_ = r.Body.Close()
-
-			var answer answerForm
-			_ = json.Unmarshal(body, &answer)
-			if questionToServe.IsCorrect(answer.AnswerID) {
+			r.ParseForm()
+			answerID, _ := strconv.Atoi(r.Form.Get("answerID"))
+			if questionToServe.IsCorrect(answerID) {
 				tmplCongrats.Execute(w, nil)
 			} else {
 				tmplCondolences.Execute(w, nil)

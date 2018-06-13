@@ -1,11 +1,10 @@
 package e2e_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	. "github.com/onsi/ginkgo"
@@ -91,9 +90,8 @@ var _ = Describe("Quiz", func() {
 
 	Context("/answer/0", func() {
 		It("shows congrats if the selected answer is correct", func() {
-			values := map[string]int{"answerID": 0}
-			formContent, _ := json.Marshal(values)
-			resp, err := http.Post(ts.URL+"/answer/0", "application/json", bytes.NewBuffer(formContent))
+			formValues := map[string][]string{"answerID": {"0"}}
+			resp, err := http.PostForm(ts.URL+"/answer/0", formValues)
 
 			Expect(err).ToNot(HaveOccurred())
 			Expect(resp.StatusCode).To(Equal(200))
@@ -106,9 +104,8 @@ var _ = Describe("Quiz", func() {
 		})
 
 		It("shows condolences if the selected answer is incorrect", func() {
-			values := map[string]int{"answerID": 1}
-			formContent, _ := json.Marshal(values)
-			resp, err := http.Post(ts.URL+"/answer/0", "application/json", bytes.NewBuffer(formContent))
+			formValues := url.Values{"answerID": {"1"}}
+			resp, err := http.PostForm(ts.URL+"/answer/0", formValues)
 
 			Expect(err).ToNot(HaveOccurred())
 			Expect(resp.StatusCode).To(Equal(200))

@@ -1,9 +1,14 @@
 <h1>Powershell for programmers<h1>
-<ul>
-<li class="QTitle">{{.Title}}</li>
+<div class="QTitle">{{.Title}}</li>
 <div class="QText">{{.Text}}</div>
 <div class="QBody">{{.Body}}</div>
-    {{range .Answers}}
-        <li class="QAnswer">{{.Text}}</li>
-    {{end}}
-</ul>
+
+    <form action="/answer/0" method="post">
+        <ul>
+        {{range $answerIndex, $answerBody := .Answers}}
+        <input type="radio" id={{$answerIndex}} name="answerID" value={{$answerIndex}}>
+        <label for={{$answerIndex}}>{{$answerBody.Text}}</label>
+        {{end}}
+        <input type="submit" value="Login">
+    </ul>
+    </form>
