@@ -46,7 +46,7 @@ var _ = Describe("Quiz", func() {
 	}
 
 	BeforeEach(func() {
-		app := webapp.NewWebApp("../templates", questions)
+		app := webapp.NewWebApp("..", questions)
 		ts = httptest.NewServer(app.Mux)
 	})
 

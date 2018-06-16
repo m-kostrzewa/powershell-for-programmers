@@ -1,4 +1,6 @@
-<h1>Powershell for programmers<h1>
+{{define "title"}}Powershell For Programmers - {{.Title}}{{end}}
+
+{{define "body"}}
 <div class="QTitle">{{.Title}}</li>
 <div class="QText">{{.Text}}</div>
 <div class="QBody">{{.Body}}</div>
@@ -9,6 +11,9 @@
     <input type="radio" id={{$answerIndex}} name="answerID" value={{$answerIndex}}>
     <label for={{$answerIndex}}>{{$answerBody.Text}}</label>
     {{end}}
-    <input type="submit" value="Login">
+    <input type="submit" value="Submit">
     </ul>
 </form>
+
+{{template "result" .}}
+{{end}}

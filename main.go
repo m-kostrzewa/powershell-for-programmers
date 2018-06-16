@@ -32,8 +32,8 @@ func main() {
 			},
 		),
 	}
-	app := webapp.NewWebApp("./templates", questions)
-	app.Serve("templates")
+	app := webapp.NewWebApp(".", questions)
+	app.Serve()
 	defer app.Shutdown()
 
 	waitForSigInt()

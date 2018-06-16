@@ -1,7 +1,10 @@
-<h1>Powershell for programmers<h1>
+{{define "title"}}Powershell For Programmers - List of questions{{end}}
+
+{{define "body"}}
 <h3>Available questions</h3>
 <ul>
 {{range .Questions}}
     <li class="QText">{{.Title}}</li>
 {{end}}
 </ul>
+{{end}}
