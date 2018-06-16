@@ -69,7 +69,7 @@ var _ = Describe("Quiz", func() {
 		})
 	})
 
-	Context("/questions/0", func() {
+	Context("GET /questions/0", func() {
 		It("shows the question", func() {
 			resp, err := http.Get(ts.URL + "/questions/0")
 			Expect(err).ToNot(HaveOccurred())
@@ -88,7 +88,7 @@ var _ = Describe("Quiz", func() {
 		})
 	})
 
-	Context("/answer/0", func() {
+	Context("POST /questions/0", func() {
 		It("shows congrats if the selected answer is correct", func() {
 			formValues := map[string][]string{"answerID": {"0"}}
 			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
