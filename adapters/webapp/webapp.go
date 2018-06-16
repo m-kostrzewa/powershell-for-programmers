@@ -46,17 +46,16 @@ func NewWebApp(templatesDir string, questions []core.Question) *WebApp {
 
 		questionPath := fmt.Sprintf("/questions/%v", index)
 		w.Mux.HandleFunc(questionPath, func(w http.ResponseWriter, r *http.Request) {
-			tmplQuestion.Execute(w, questionToServe)
-		})
 
-		answerPath := fmt.Sprintf("/answer/%v", index)
-		w.Mux.HandleFunc(answerPath, func(w http.ResponseWriter, r *http.Request) {
-			r.ParseForm()
-			answerID, _ := strconv.Atoi(r.Form.Get("answerID"))
-			if questionToServe.IsCorrect(answerID) {
-				tmplCongrats.Execute(w, nil)
-			} else {
-				tmplCondolences.Execute(w, nil)
+			tmplQuestion.Execute(w, questionToServe)
+			if r.Method == "POST" {
+				r.ParseForm()
+				answerID, _ := strconv.Atoi(r.Form.Get("answerID"))
+				if questionToServe.IsCorrect(answerID) {
+					tmplCongrats.Execute(w, nil)
+				} else {
+					tmplCondolences.Execute(w, nil)
+				}
 			}
 		})
 	}

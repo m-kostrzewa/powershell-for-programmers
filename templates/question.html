@@ -3,12 +3,12 @@
 <div class="QText">{{.Text}}</div>
 <div class="QBody">{{.Body}}</div>
 
-    <form action="/answer/0" method="post">
-        <ul>
-        {{range $answerIndex, $answerBody := .Answers}}
-        <input type="radio" id={{$answerIndex}} name="answerID" value={{$answerIndex}}>
-        <label for={{$answerIndex}}>{{$answerBody.Text}}</label>
-        {{end}}
-        <input type="submit" value="Login">
+<form action="/questions/0" method="post">
+    <ul>
+    {{range $answerIndex, $answerBody := .Answers}}
+    <input type="radio" id={{$answerIndex}} name="answerID" value={{$answerIndex}}>
+    <label for={{$answerIndex}}>{{$answerBody.Text}}</label>
+    {{end}}
+    <input type="submit" value="Login">
     </ul>
-    </form>
+</form>

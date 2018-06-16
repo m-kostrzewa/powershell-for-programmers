@@ -91,7 +91,7 @@ var _ = Describe("Quiz", func() {
 	Context("/answer/0", func() {
 		It("shows congrats if the selected answer is correct", func() {
 			formValues := map[string][]string{"answerID": {"0"}}
-			resp, err := http.PostForm(ts.URL+"/answer/0", formValues)
+			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
 
 			Expect(err).ToNot(HaveOccurred())
 			Expect(resp.StatusCode).To(Equal(200))
@@ -105,7 +105,7 @@ var _ = Describe("Quiz", func() {
 
 		It("shows condolences if the selected answer is incorrect", func() {
 			formValues := url.Values{"answerID": {"1"}}
-			resp, err := http.PostForm(ts.URL+"/answer/0", formValues)
+			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
 
 			Expect(err).ToNot(HaveOccurred())
 			Expect(resp.StatusCode).To(Equal(200))
