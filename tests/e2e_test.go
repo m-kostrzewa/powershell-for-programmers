@@ -11,7 +11,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/m-kostrzewa/powershell-for-programmers/adapters/webapp"
-	"github.com/m-kostrzewa/powershell-for-programmers/core"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
 )
 
 func TestE2E(t *testing.T) {
@@ -22,27 +22,27 @@ func TestE2E(t *testing.T) {
 var _ = Describe("Quiz", func() {
 	var ts *httptest.Server
 
-	questions := []core.Question{
-		{
-			Title: "Lexical scope",
-			Text:  "Does Powershell do X?",
-			Body:  "Some pseudocode here....",
-			Answers: []core.Answer{
+	questions := []question.Question{
+		*question.New(question.NextQuestionID(),
+			"Lexical scope",
+			"Does Powershell do X?",
+			"Some pseudocode here....",
+			[]question.Answer{
 				{Text: "Answer 1", IsCorrect: true},
 				{Text: "Answer 2", IsCorrect: false},
 				{Text: "Answer 3", IsCorrect: false},
 			},
-		},
-		{
-			Title: "Scopes in closures",
-			Text:  "What is the expected output?",
-			Body:  "Some other pseudocode here....",
-			Answers: []core.Answer{
+		),
+		*question.New(question.NextQuestionID(),
+			"Scopes in closures",
+			"What is the expected output?",
+			"Some other pseudocode here....",
+			[]question.Answer{
 				{Text: "aab", IsCorrect: true},
 				{Text: "abb", IsCorrect: false},
 				{Text: "aba", IsCorrect: false},
 			},
-		},
+		),
 	}
 
 	BeforeEach(func() {

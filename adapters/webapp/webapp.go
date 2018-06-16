@@ -8,7 +8,7 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/m-kostrzewa/powershell-for-programmers/core"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
 )
 
 type WebApp struct {
@@ -21,10 +21,10 @@ type answerForm struct {
 }
 
 type questionsListPage struct {
-	Questions []core.Question
+	Questions []question.Question
 }
 
-func NewWebApp(templatesDir string, questions []core.Question) *WebApp {
+func NewWebApp(templatesDir string, questions []question.Question) *WebApp {
 	w := WebApp{
 		server: nil,
 		Mux:    http.NewServeMux(),
