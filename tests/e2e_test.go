@@ -65,9 +65,9 @@ var _ = Describe("Quiz", func() {
 		})
 	})
 
-	Context("GET /questions/0", func() {
+	Context("GET /questions/lexical-scope", func() {
 		It("shows the question", func() {
-			resp, err := http.Get(ts.URL + "/questions/0")
+			resp, err := http.Get(ts.URL + "/questions/lexical-scope")
 			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Lexical scope"))
@@ -79,10 +79,10 @@ var _ = Describe("Quiz", func() {
 		})
 	})
 
-	Context("POST /questions/0", func() {
+	Context("POST /questions/lexical-scope", func() {
 		It("shows congrats if the selected answer is correct", func() {
 			formValues := map[string][]string{"answerID": {"0"}}
-			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
+			resp, err := http.PostForm(ts.URL+"/questions/lexical-scope", formValues)
 			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Congrats"))
@@ -90,7 +90,7 @@ var _ = Describe("Quiz", func() {
 
 		It("shows condolences if the selected answer is incorrect", func() {
 			formValues := url.Values{"answerID": {"1"}}
-			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
+			resp, err := http.PostForm(ts.URL+"/questions/lexical-scope", formValues)
 			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Sorry"))
@@ -98,7 +98,7 @@ var _ = Describe("Quiz", func() {
 
 		It("doesn't show the list of possible answers", func() {
 			formValues := url.Values{"answerID": {"1"}}
-			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
+			resp, err := http.PostForm(ts.URL+"/questions/lexical-scope", formValues)
 			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).ToNot(ContainSubstring("Answer 1"))

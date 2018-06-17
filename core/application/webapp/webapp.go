@@ -8,6 +8,7 @@ import (
 	"path"
 	"strconv"
 
+	"github.com/gosimple/slug"
 	"github.com/m-kostrzewa/powershell-for-programmers/core/domain/question"
 )
 
@@ -44,7 +45,7 @@ func NewWebApp(rootDir string, questionsRepo question.Repository) *WebApp {
 
 	for index, q := range questionsRepo.FindAll() {
 		questionToServe := q
-		questionPath := fmt.Sprintf("/questions/%v", index)
+		questionPath := fmt.Sprintf("/questions/%v", slug.Make(q.Title))
 
 		questionsListView.QuestionsList[index] = questionListItemView{Title: q.Title, Path: questionPath}
 
