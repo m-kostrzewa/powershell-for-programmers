@@ -40,7 +40,7 @@ func New(questionID QuestionID, title, text, body string, answers []Answer) *Que
 }
 
 func NextID() QuestionID {
-	return QuestionID(uuid.Must(uuid.NewV4()))
+	return QuestionID(uuid.NewV4())
 }
 
 func (q *Question) IsCorrect(answerId int) bool {

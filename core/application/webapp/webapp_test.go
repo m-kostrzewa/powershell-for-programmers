@@ -14,14 +14,14 @@ import (
 func TestCanStartAndStop(t *testing.T) {
 	questionsRepo := inmem.New()
 	webapp := webapp.NewWebApp("../../..", questionsRepo)
-	webapp.Serve()
+	webapp.Serve(8080)
 	webapp.Shutdown()
 }
 
 func TestServesCss(t *testing.T) {
 	questionsRepo := inmem.New()
 	webapp := webapp.NewWebApp("../../..", questionsRepo)
-	webapp.Serve()
+	webapp.Serve(8080)
 	defer webapp.Shutdown()
 	resp, err := http.Get("http://127.0.0.1:8080/static/style.css")
 	assert.NoError(t, err)

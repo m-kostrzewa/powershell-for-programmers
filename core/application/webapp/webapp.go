@@ -20,26 +20,24 @@ type answerForm struct {
 
 func NewWebApp(rootDir string, questionsRepo question.Repository) *WebApp {
 	w := WebApp{
-		server: nil,
-		Mux:    http.NewServeMux(),
+		Mux: http.NewServeMux(),
 	}
 
 	fs := http.FileServer(http.Dir(path.Join(rootDir, "static")))
 	w.Mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	builder := NewBuilder(rootDir, "templates")
-	qv := NewQuestionsController(builder, questionsRepo)
-	gorillaMux := mux.NewRouter()
-	gorillaMux.HandleFunc("/questions", qv.QuestionListHandler)
-	gorillaMux.HandleFunc("/questions/{title}", qv.QuestionShowHandler)
-
-	w.Mux.Handle("/", gorillaMux)
+	qc := NewQuestionsController(builder, questionsRepo)
+	gmux := mux.NewRouter()
+	gmux.HandleFunc("/questions", qc.QuestionListHandler)
+	gmux.HandleFunc("/questions/{title}", qc.QuestionShowHandler)
+	w.Mux.Handle("/", gmux)
 
 	return &w
 }
 
-func (w *WebApp) Serve() {
-	listener, _ := net.ListenTCP("tcp4", &net.TCPAddr{IP: net.IPv4(127, 0, 0, 1), Port: 8080})
+func (w *WebApp) Serve(port int) {
+	listener, _ := net.ListenTCP("tcp4", &net.TCPAddr{IP: net.IPv4(127, 0, 0, 1), Port: port})
 	w.server = &http.Server{Handler: w.Mux}
 
 	go func() {

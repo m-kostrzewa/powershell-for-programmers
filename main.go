@@ -35,7 +35,7 @@ $a = Get-Credential`,
 		},
 	))
 	app := webapp.NewWebApp(".", questions)
-	app.Serve()
+	app.Serve(8080)
 	defer app.Shutdown()
 
 	waitForSigInt()
