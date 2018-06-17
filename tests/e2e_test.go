@@ -57,12 +57,7 @@ var _ = Describe("Quiz", func() {
 	Context("/questions", func() {
 		It("lists all available questions", func() {
 			resp, err := http.Get(ts.URL + "/questions")
-			Expect(err).ToNot(HaveOccurred())
-			Expect(resp.StatusCode).To(Equal(200))
-
-			body, err := ioutil.ReadAll(resp.Body)
-			Expect(err).ToNot(HaveOccurred())
-			bodyStr := string(body)
+			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Lexical scope"))
 			Expect(bodyStr).To(ContainSubstring("Scopes in closures"))
@@ -72,12 +67,7 @@ var _ = Describe("Quiz", func() {
 	Context("GET /questions/0", func() {
 		It("shows the question", func() {
 			resp, err := http.Get(ts.URL + "/questions/0")
-			Expect(err).ToNot(HaveOccurred())
-			Expect(resp.StatusCode).To(Equal(200))
-
-			body, err := ioutil.ReadAll(resp.Body)
-			Expect(err).ToNot(HaveOccurred())
-			bodyStr := string(body)
+			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Lexical scope"))
 			Expect(bodyStr).To(ContainSubstring("Does Powershell do X?"))
@@ -92,13 +82,7 @@ var _ = Describe("Quiz", func() {
 		It("shows congrats if the selected answer is correct", func() {
 			formValues := map[string][]string{"answerID": {"0"}}
 			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
-
-			Expect(err).ToNot(HaveOccurred())
-			Expect(resp.StatusCode).To(Equal(200))
-
-			body, err := ioutil.ReadAll(resp.Body)
-			Expect(err).ToNot(HaveOccurred())
-			bodyStr := string(body)
+			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Congrats"))
 		})
@@ -106,13 +90,7 @@ var _ = Describe("Quiz", func() {
 		It("shows condolences if the selected answer is incorrect", func() {
 			formValues := url.Values{"answerID": {"1"}}
 			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
-
-			Expect(err).ToNot(HaveOccurred())
-			Expect(resp.StatusCode).To(Equal(200))
-
-			body, err := ioutil.ReadAll(resp.Body)
-			Expect(err).ToNot(HaveOccurred())
-			bodyStr := string(body)
+			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).To(ContainSubstring("Sorry"))
 		})
@@ -120,15 +98,18 @@ var _ = Describe("Quiz", func() {
 		It("doesn't show the list of possible answers", func() {
 			formValues := url.Values{"answerID": {"1"}}
 			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
-
-			Expect(err).ToNot(HaveOccurred())
-			Expect(resp.StatusCode).To(Equal(200))
-
-			body, err := ioutil.ReadAll(resp.Body)
-			Expect(err).ToNot(HaveOccurred())
-			bodyStr := string(body)
+			bodyStr := mustReadResponse(resp, err)
 
 			Expect(bodyStr).ToNot(ContainSubstring("Answer 1"))
 		})
 	})
 })
+
+func mustReadResponse(resp *http.Response, err error) string {
+	Expect(err).ToNot(HaveOccurred())
+	Expect(resp.StatusCode).To(Equal(200))
+
+	body, err := ioutil.ReadAll(resp.Body)
+	Expect(err).ToNot(HaveOccurred())
+	return string(body)
+}
