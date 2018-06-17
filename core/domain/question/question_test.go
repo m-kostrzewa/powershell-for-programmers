@@ -5,7 +5,7 @@ import (
 
 	"github.com/satori/go.uuid"
 
-	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/domain/question"
 	"github.com/stretchr/testify/assert"
 )
 

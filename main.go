@@ -7,7 +7,7 @@ import (
 
 	"github.com/m-kostrzewa/powershell-for-programmers/adapters/inmem"
 	"github.com/m-kostrzewa/powershell-for-programmers/core/application/webapp"
-	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/domain/question"
 )
 
 func main() {

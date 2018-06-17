@@ -13,7 +13,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/m-kostrzewa/powershell-for-programmers/core/application/webapp"
-	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/domain/question"
 )
 
 func TestE2E(t *testing.T) {

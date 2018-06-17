@@ -3,7 +3,7 @@ package inmem
 import (
 	"sync"
 
-	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/domain/question"
 )
 
 type InMemQuestionRepository struct {
