@@ -14,7 +14,9 @@ func main() {
 		*question.New(question.NextQuestionID(),
 			"Lexical scope",
 			"Does Powershell do X?",
-			"Some pseudocode here....",
+			`
+Write-Host 'Hello, world!'
+$a = Get-Credential`,
 			[]question.Answer{
 				{Text: "Answer 1", IsCorrect: true},
 				{Text: "Answer 2", IsCorrect: false},
