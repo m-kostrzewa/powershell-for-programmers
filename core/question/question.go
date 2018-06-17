@@ -39,7 +39,7 @@ func New(questionID QuestionID, title, text, body string, answers []Answer) *Que
 	}
 }
 
-func NextQuestionID() QuestionID {
+func NextID() QuestionID {
 	return QuestionID(uuid.Must(uuid.NewV4()))
 }
 

@@ -29,7 +29,7 @@ type questionsListView struct {
 	QuestionsList map[int]questionListItemView
 }
 
-func NewWebApp(rootDir string, questions []question.Question) *WebApp {
+func NewWebApp(rootDir string, questionsRepo question.Repository) *WebApp {
 	w := WebApp{
 		server: nil,
 		Mux:    http.NewServeMux(),
@@ -42,7 +42,7 @@ func NewWebApp(rootDir string, questions []question.Question) *WebApp {
 		QuestionsList: map[int]questionListItemView{},
 	}
 
-	for index, q := range questions {
+	for index, q := range questionsRepo.FindAll() {
 		questionToServe := q
 		questionPath := fmt.Sprintf("/questions/%v", index)
 

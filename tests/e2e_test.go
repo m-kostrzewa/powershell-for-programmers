@@ -7,10 +7,12 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/m-kostrzewa/powershell-for-programmers/adapters/inmem"
+
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/m-kostrzewa/powershell-for-programmers/adapters/webapp"
+	"github.com/m-kostrzewa/powershell-for-programmers/core/application/webapp"
 	"github.com/m-kostrzewa/powershell-for-programmers/core/question"
 )
 
@@ -22,28 +24,27 @@ func TestE2E(t *testing.T) {
 var _ = Describe("Quiz", func() {
 	var ts *httptest.Server
 
-	questions := []question.Question{
-		*question.New(question.NextQuestionID(),
-			"Lexical scope",
-			"Does Powershell do X?",
-			"Some pseudocode here....",
-			[]question.Answer{
-				{Text: "Answer 1", IsCorrect: true},
-				{Text: "Answer 2", IsCorrect: false},
-				{Text: "Answer 3", IsCorrect: false},
-			},
-		),
-		*question.New(question.NextQuestionID(),
-			"Scopes in closures",
-			"What is the expected output?",
-			"Some other pseudocode here....",
-			[]question.Answer{
-				{Text: "aab", IsCorrect: true},
-				{Text: "abb", IsCorrect: false},
-				{Text: "aba", IsCorrect: false},
-			},
-		),
-	}
+	questions := inmem.New()
+	questions.Store(question.New(question.NextID(),
+		"Lexical scope",
+		"Does Powershell do X?",
+		"Some pseudocode here....",
+		[]question.Answer{
+			{Text: "Answer 1", IsCorrect: true},
+			{Text: "Answer 2", IsCorrect: false},
+			{Text: "Answer 3", IsCorrect: false},
+		},
+	))
+	questions.Store(question.New(question.NextID(),
+		"Scopes in closures",
+		"What is the expected output?",
+		"Some other pseudocode here....",
+		[]question.Answer{
+			{Text: "aab", IsCorrect: true},
+			{Text: "abb", IsCorrect: false},
+			{Text: "aba", IsCorrect: false},
+		},
+	))
 
 	BeforeEach(func() {
 		app := webapp.NewWebApp("..", questions)

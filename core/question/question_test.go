@@ -10,7 +10,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	id := question.NextQuestionID()
+	id := question.NextID()
 	q := question.New(id, "Question?", "Text", "Body",
 		[]question.Answer{
 			{Text: "Answer 1", IsCorrect: true},

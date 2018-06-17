@@ -17,7 +17,7 @@ func TestFindAll(t *testing.T) {
 func TestStore(t *testing.T) {
 	var repo question.Repository
 	repo = inmem.New()
-	q := question.New(question.NextQuestionID(), "A", "B", "C", nil)
+	q := question.New(question.NextID(), "A", "B", "C", nil)
 	err := repo.Store(q)
 	assert.NoError(t, err)
 	assert.NotEmpty(t, repo.FindAll())
@@ -27,7 +27,7 @@ func TestFind(t *testing.T) {
 	var repo question.Repository
 	repo = inmem.New()
 
-	guid := question.NextQuestionID()
+	guid := question.NextID()
 	q := question.New(guid, "A", "B", "C", nil)
 	err := repo.Store(q)
 
@@ -40,7 +40,7 @@ func TestFindDoesntExist(t *testing.T) {
 	var repo question.Repository
 	repo = inmem.New()
 
-	guid := question.NextQuestionID()
+	guid := question.NextID()
 
 	found, err := repo.Find(guid)
 	assert.Error(t, err)
