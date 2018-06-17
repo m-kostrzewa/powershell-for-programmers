@@ -19,6 +19,12 @@ type Question struct {
 	Answers    []Answer
 }
 
+type QuestionRepository interface {
+	Find(QuestionID) (*Question, error)
+	FindAll() []*Question
+	Store(*Question) error
+}
+
 func New(questionID QuestionID, title, text, body string, answers []Answer) *Question {
 	return &Question{
 		QuestionID: questionID,
