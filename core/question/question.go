@@ -1,6 +1,8 @@
 package question
 
 import (
+	"errors"
+
 	"github.com/satori/go.uuid"
 )
 
@@ -19,11 +21,13 @@ type Question struct {
 	Answers    []Answer
 }
 
-type QuestionRepository interface {
+type Repository interface {
 	Find(QuestionID) (*Question, error)
 	FindAll() []*Question
 	Store(*Question) error
 }
+
+var ErrNotFound = errors.New("Question not found")
 
 func New(questionID QuestionID, title, text, body string, answers []Answer) *Question {
 	return &Question{

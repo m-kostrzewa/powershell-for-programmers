@@ -12,8 +12,12 @@ func New() *InMemQuestionRepository {
 	}
 }
 
-func (r *InMemQuestionRepository) Find(question.QuestionID) (*question.Question, error) {
-	return nil, nil
+func (r *InMemQuestionRepository) Find(guid question.QuestionID) (*question.Question, error) {
+	if val, ok := r.questions[guid]; ok {
+		return val, nil
+	} else {
+		return nil, question.ErrNotFound
+	}
 }
 
 func (r *InMemQuestionRepository) FindAll() []*question.Question {
@@ -24,6 +28,7 @@ func (r *InMemQuestionRepository) FindAll() []*question.Question {
 	return list
 }
 
-func (r *InMemQuestionRepository) Store(*question.Question) error {
+func (r *InMemQuestionRepository) Store(q *question.Question) error {
+	r.questions[q.QuestionID] = q
 	return nil
 }
