@@ -65,7 +65,9 @@ func NewWebApp(rootDir string, questions []question.Question) *WebApp {
 				}
 				tmpl = template.Must(template.ParseFiles(layout, question, result))
 			} else {
-				tmpl = template.Must(template.ParseFiles(layout, question))
+				form := path.Join(rootDir, "templates", "answerform.html")
+
+				tmpl = template.Must(template.ParseFiles(layout, question, form))
 			}
 
 			tmpl.ExecuteTemplate(w, "layout", questionToServe)

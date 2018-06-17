@@ -116,5 +116,19 @@ var _ = Describe("Quiz", func() {
 
 			Expect(bodyStr).To(ContainSubstring("Sorry"))
 		})
+
+		It("doesn't show the list of possible answers", func() {
+			formValues := url.Values{"answerID": {"1"}}
+			resp, err := http.PostForm(ts.URL+"/questions/0", formValues)
+
+			Expect(err).ToNot(HaveOccurred())
+			Expect(resp.StatusCode).To(Equal(200))
+
+			body, err := ioutil.ReadAll(resp.Body)
+			Expect(err).ToNot(HaveOccurred())
+			bodyStr := string(body)
+
+			Expect(bodyStr).ToNot(ContainSubstring("Answer 1"))
+		})
 	})
 })

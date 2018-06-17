@@ -1,0 +1,11 @@
+{{define "answerform"}}
+<form method="post">
+    <ul>
+    {{range $answerIndex, $answerBody := .Answers}}
+    <input type="radio" id={{$answerIndex}} name="answerID" value={{$answerIndex}}>
+    <label for={{$answerIndex}}>{{$answerBody.Text}}</label>
+    {{end}}
+    <input type="submit" value="Submit">
+    </ul>
+</form>
+{{end}}
