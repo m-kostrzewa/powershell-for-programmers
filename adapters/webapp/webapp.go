@@ -20,8 +20,13 @@ type answerForm struct {
 	AnswerID int `json:"answerid"`
 }
 
-type questionsListPage struct {
-	Questions []question.Question
+type questionListItemView struct {
+	Title string
+	Path  string
+}
+
+type questionsListView struct {
+	QuestionsList map[int]questionListItemView
 }
 
 func NewWebApp(rootDir string, questions []question.Question) *WebApp {
@@ -33,24 +38,16 @@ func NewWebApp(rootDir string, questions []question.Question) *WebApp {
 	fs := http.FileServer(http.Dir(path.Join(rootDir, "static")))
 	w.Mux.Handle("/static/", http.StripPrefix("/static/", fs))
 
-	w.Mux.HandleFunc("/questions", func(w http.ResponseWriter, r *http.Request) {
-		layout := path.Join(rootDir, "templates", "layout.html")
-		questionsLis := path.Join(rootDir, "templates", "questions_list.html")
-
-		var tmpl *template.Template
-
-		data := questionsListPage{
-			Questions: questions,
-		}
-
-		tmpl = template.Must(template.ParseFiles(layout, questionsLis))
-		tmpl.ExecuteTemplate(w, "layout", data)
-	})
+	questionsListView := questionsListView{
+		QuestionsList: map[int]questionListItemView{},
+	}
 
 	for index, q := range questions {
 		questionToServe := q
-
 		questionPath := fmt.Sprintf("/questions/%v", index)
+
+		questionsListView.QuestionsList[index] = questionListItemView{Title: q.Title, Path: questionPath}
+
 		w.Mux.HandleFunc(questionPath, func(w http.ResponseWriter, r *http.Request) {
 
 			layout := path.Join(rootDir, "templates", "layout.html")
@@ -74,6 +71,16 @@ func NewWebApp(rootDir string, questions []question.Question) *WebApp {
 			tmpl.ExecuteTemplate(w, "layout", questionToServe)
 		})
 	}
+
+	w.Mux.HandleFunc("/questions", func(w http.ResponseWriter, r *http.Request) {
+		layout := path.Join(rootDir, "templates", "layout.html")
+		questionsLis := path.Join(rootDir, "templates", "questions_list.html")
+
+		var tmpl *template.Template
+
+		tmpl = template.Must(template.ParseFiles(layout, questionsLis))
+		tmpl.ExecuteTemplate(w, "layout", questionsListView)
+	})
 
 	return &w
 }

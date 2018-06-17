@@ -3,8 +3,8 @@
 {{define "body"}}
 <h3>Available questions</h3>
 <ul>
-{{range .Questions}}
-    <li class="QText">{{.Title}}</li>
+{{range $questionIndex, $question := .QuestionsList}}
+    <li>{{$questionIndex}}. <a href="{{.Path}}">{{.Title}}</a></li>
 {{end}}
 </ul>
 {{end}}
