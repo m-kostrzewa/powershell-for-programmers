@@ -75,15 +75,9 @@ func NewWebApp(rootDir string, questionsRepo question.Repository) *WebApp {
 		})
 	}
 
-	w.Mux.HandleFunc("/questions", func(w http.ResponseWriter, r *http.Request) {
-		layout := path.Join(rootDir, "templates", "layout.html")
-		questionsLis := path.Join(rootDir, "templates", "questions_list.html")
-
-		var tmpl *template.Template
-
-		tmpl = template.Must(template.ParseFiles(layout, questionsLis))
-		tmpl.ExecuteTemplate(w, "layout", questionsListView)
-	})
+	builder := NewBuilder(rootDir, "templates")
+	qv := NewQuestionsController(builder, questionsRepo)
+	w.Mux.HandleFunc("/questions", qv.QuestionListHandler)
 
 	return &w
 }
